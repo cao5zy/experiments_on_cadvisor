@@ -7,7 +7,14 @@
   vars:
     root_path: "."
     setup_folder: "{{ root_path }}/setup"
+    name_of_target: "prometheus-1.7.1.linux-amd64"
+    
   tasks:
+  - name: install unzip
+    apt:
+      name: unzip
+      state: present
+
   - name: prepare the folder to download the release code of prometheus
     file:
       path: "{{ setup_folder }}"
@@ -15,7 +22,13 @@
 
   - name: download the prometheus release code
     get_url:
-      url: "https://github.com/prometheus/prometheus/releases/download/v1.7.1/prometheus-1.7.1.linux-amd64.tar.gz"
-      dest: "{{ setup_folder }}"
+      url: "https://github.com/prometheus/prometheus/releases/download/v1.7.1/{{ name_of_target }}.tar.gz"
+      dest: "{{ setup_folder }}/{{ name_of_target }}.tar.gz"
+      force: no
+
+  - name: uncompress the file
+    shell: "tar xvfz {{ name_of_target }}.tar.gz"
+    args:
+      chdir: "{{ setup_folder }}"
 
 ...
