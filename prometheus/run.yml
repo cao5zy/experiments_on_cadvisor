@@ -1,0 +1,16 @@
+---
+- name: setup prometheus
+  hosts: localhost
+  become: true
+  become_method: sudo
+
+  vars:
+    root_path: "."
+
+  tasks:
+  - name: prepare the folder to download the release code of prometheus
+    file:
+      path: "{{ root_path }}/setup"
+      state: directory
+
+...
