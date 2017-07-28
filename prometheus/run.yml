@@ -10,6 +10,7 @@
     name_of_target: "prometheus-1.7.1.linux-amd64"
     path_of_config: "prometheus.yml"
     
+    
   tasks:
   - name: install unzip
     apt:
