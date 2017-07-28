@@ -4,42 +4,10 @@
   become: true
   become_method: sudo
 
-  vars:
-    root_path: "."
-    setup_folder: "{{ root_path }}/setup"
-    name_of_target: "prometheus-1.7.1.linux-amd64"
-    path_of_config: "prometheus.yml"
-    
-    
   tasks:
-  - name: install unzip
-    apt:
-      name: unzip
-      state: present
-
-  - name: prepare the folder to download the release code of prometheus
-    file:
-      path: "{{ setup_folder }}"
-      state: directory
-
-  - name: download the prometheus release code
-    get_url:
-      url: "https://github.com/prometheus/prometheus/releases/download/v1.7.1/{{ name_of_target }}.tar.gz"
-      dest: "{{ setup_folder }}/{{ name_of_target }}.tar.gz"
-      force: no
-
-  - name: uncompress the file
-    shell: "tar xvfz {{ name_of_target }}.tar.gz"
-    args:
-      chdir: "{{ setup_folder }}"
-
-  - name: add configuration to prometheus
-    copy:
-      src: "{{ path_of_config }}"
-      dest: "{{ setup_folder }}/{{ name_of_target }}"
-
-  - name: start prometheus
-    command: "./prometheus -config.file={{ path_of_config }}"
-    args:
-      chdir: "{{ setup_folder }}/{{ name_of_target }}"
+  - name: build prometheus image
+    docker_image:
+      path: "prometheus-dockerfile"
+      tag: "1.0"
+      name: "prometheus-image"
 ...
