@@ -36,4 +36,9 @@
     copy:
       src: "{{ path_of_config }}"
       dest: "{{ setup_folder }}/{{ name_of_target }}"
+
+  - name: start prometheus
+    command: "./prometheus -config.file={{ path_of_config }}"
+    args:
+      chdir: "{{ setup_folder }}/{{ name_of_target }}"
 ...
