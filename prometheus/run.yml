@@ -4,10 +4,23 @@
   become: true
   become_method: sudo
 
+  vars:
+    prometheus_img_name: "prometheus-image"
+    prometheus_img_tag: "1.0"
+    
   tasks:
   - name: build prometheus image
     docker_image:
       path: "prometheus-dockerfile"
-      tag: "1.0"
-      name: "prometheus-image"
+      tag: "{{ prometheus_img_tag }}"
+      name: "{{ prometheus_img_name }}"
+
+  - name: build prometheus container
+    docker_container:
+      image: "{{ prometheus_img_name }}:{{ prometheus_img_tag }}"
+      name: "prometheus-svr"
+      ports:
+      - "9090:9090"
+      
+      
 ...
